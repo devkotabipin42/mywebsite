@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Hub - Football & Cricket Live Updates</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #1e81b0;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin: 1em 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      padding: 0.5em 1em;
+      background-color: #145b85;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #0d4d5c;
+    }
+
+    section {
+      margin: 1em;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+
+    .video-container {
+      text-align: center;
+      margin: 2em 0;
+    }
+
+    .video-container iframe {
+      width: 80%;
+      height: 400px;
+    }
+
+    .comment-section {
+      margin-top: 2em;
+    }
+
+    .comment-section textarea {
+      width: 100%;
+      padding: 1em;
+      margin: 1em 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .comment-section button {
+      background-color: #1e81b0;
+      color: white;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .comment-section button:hover {
+      background-color: #145b85;
+    }
+
+    .comments {
+      margin-top: 1em;
+    }
+
+    .comment {
+      background-color: #fff;
+      padding: 1em;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 0.5em;
+    }
+
+    .voting-section {
+      margin: 2em 0;
+      text-align: center;
+    }
+
+    .schedule-section {
+      margin: 2em 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      padding: 0.8em;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #1e81b0;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sports Hub</h1>
+    <p>Your ultimate destination for Football & Cricket updates</p>
+    <nav>
+      <a href="#live-scores">Live Scores</a>
+      <a href="#live-videos">Live Videos</a>
+      <a href="#comments">Comments</a>
+      <a href="#schedule">Schedule</a>
+    </nav>
+  </header>
+
+  <!-- Live Scores -->
+  <section id="live-scores">
+    <h2>Live Scores</h2>
+    <div id="scoreboard">
+      <!-- Dynamic content for scores -->
+    </div>
+  </section>
+
+  <!-- Live Videos -->
+  <section id="live-videos" class="video-container">
+    <h2>Live Videos</h2>
+    <iframe src="https://www.youtube.com/embed/live_stream?channel=UCBR8-60-B28hp2BmDPdntcQ" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <!-- Comments -->
+  <section id="comments" class="comment-section">
+    <h2>Leave a Comment</h2>
+    <textarea id="comment-input" placeholder="Write your comment..."></textarea>
+    <button onclick="submitComment()">Post Comment</button>
+    <div id="comments-container" class="comments"></div>
+  </section>
+
+  <!-- Voting -->
+  <section id="voting" class="voting-section">
+    <h2>Vote for Your Favorite Team</h2>
+    <button onclick="vote('Team A')">Vote for Team A</button>
+    <button onclick="vote('Team B')">Vote for Team B</button>
+    <div id="voting-results"></div>
+  </section>
+
+  <!-- Schedule -->
+  <section id="schedule" class="schedule-section">
+    <h2>Adjust Your Favorite Team's Schedule</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Team</th>
+          <th>Opponent</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="schedule-body">
+        <!-- Schedule will load dynamically -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const matches = [
+      { sport: "Football", home: "Team A", away: "Team B", score: "2-1", status: "Live" },
+      { sport: "Cricket", home: "Nepal", away: "India", score: "250/8", status: "Innings Break" },
+    ];
+
+    const schedule = [
+      { date: "2025-01-15", team: "Team A", opponent: "Team C", time: "16:00" },
+      { date: "2025-01-16", team: "Nepal", opponent: "Pakistan", time: "10:00" },
+    ];
+
+    const comments = [];
+    const votes = { "Team A": 0, "Team B": 0 };
+
+    function loadScores() {
+      const scoreboard = document.getElementById("scoreboard");
+      matches.forEach(match => {
+        const matchDiv = document.createElement("div");
+        matchDiv.innerHTML = `
+          <p><strong>${match.sport}:</strong> ${match.home} vs ${match.away} - ${match.score} (${match.status})</p>
+        `;
+        scoreboard.appendChild(matchDiv);
+      });
+    }
+
+    function loadSchedule() {
+      const scheduleBody = document.getElementById("schedule-body");
+      schedule.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.team}</td>
+          <td>${item.opponent}</td>
+          <td>${item.time}</td>
+        `;
+        scheduleBody.appendChild(row);
+      });
+    }
+
+    function submitComment() {
+      const input = document.getElementById("comment-input");
+      const comment = input.value.trim();
+      if (comment) {
+        comments.push(comment);
+        input.value = "";
+        renderComments();
+      }
+    }
+
+    function renderComments() {
+      const commentsContainer = document.getElementById("comments-container");
+      commentsContainer.innerHTML = "";
+      comments.forEach((comment, index) => {
+        const commentDiv = document.createElement("div");
+        commentDiv.classList.add("comment");
+        commentDiv.innerText = `${index + 1}. ${comment}`;
+        commentsContainer.appendChild(commentDiv);
+      });
+    }
+
+    function vote(team) {
+      votes[team]++;
+      const votingResults = document.getElementById("voting-results");
+      votingResults.innerHTML = `
+        <p>Team A: ${votes["Team A"]} votes</p>
+        <p>Team B: ${votes["Team B"]} votes</p>
+      `;
+    }
+
+    // Initialize
+    loadScores();
+    loadSchedule();
+  </script>
+</body>
+</html>
